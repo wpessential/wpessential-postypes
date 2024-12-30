@@ -1,0 +1,22 @@
+{
+    "name": "wpessential/wpessential-postypes",
+    "minimum-stability": "stable",
+    "description": "WPEssential Postypes helping in registry of custom post types and taxonomies in WordPress.",
+    "type": "library",
+    "license": "GPL-3.0-or-later",
+    "autoload": {
+        "psr-4": {
+            "WPEssential\\Library\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "WPEssential",
+            "email": "ceo@wpessential.org"
+        }
+    ],
+    "require": {
+        "php" : ">=7.4",
+        "wpessential/wpessential-commons": "^1.0.8"
+    }
+}
