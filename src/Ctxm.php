@@ -1508,7 +1508,7 @@ class Ctxm
 	 */
 	private function processLabels ()
 	{
-		$name_field_description   = esc_html__( 'The name is how it appears on your site.', 'TEXT_DOMAIN', 'TEXT_DOMAIN' );
+		$name_field_description   = esc_html__( 'The name is how it appears on your site.', 'TEXT_DOMAIN' );
 		$slug_field_description   = esc_html__( 'The &#8220;slug&#8221; is the URL-friendly version of the name. It is usually all lowercase and contains only letters, numbers, and hyphens.', 'TEXT_DOMAIN' );
 		$parent_field_description = esc_html__( 'Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of Bebop and Big Band.', 'TEXT_DOMAIN' );
 		$desc_field_description   = esc_html__( 'The description is not prominent by default; however, some themes may show it.', 'TEXT_DOMAIN' );
