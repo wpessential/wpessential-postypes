@@ -1514,41 +1514,35 @@ class Ctxm
 		$desc_field_description   = esc_html__( 'The description is not prominent by default; however, some themes may show it.', 'TEXT_DOMAIN' );
 
 		$labels = [
-			'name'                       => [ _x( 'Tags', 'taxonomy general name', 'TEXT_DOMAIN' ), _x( 'Categories', 'taxonomy general name', 'TEXT_DOMAIN' ) ],
-			'singular_name'              => [ _x( 'Tag', 'taxonomy singular name', 'TEXT_DOMAIN' ), _x( 'Category', 'taxonomy singular name', 'TEXT_DOMAIN' ) ],
-			'search_items'               => [ esc_html__( 'Search Tags', 'TEXT_DOMAIN' ), esc_html__( 'Search Categories', 'TEXT_DOMAIN' ) ],
-			'popular_items'              => [ esc_html__( 'Popular Tags', 'TEXT_DOMAIN' ), null ],
-			'all_items'                  => [ esc_html__( 'All Tags', 'TEXT_DOMAIN' ), esc_html__( 'All Categories', 'TEXT_DOMAIN' ) ],
-			'parent_item'                => [ null, esc_html__( 'Parent Category', 'TEXT_DOMAIN' ) ],
-			'parent_item_colon'          => [ null, esc_html__( 'Parent Category:', 'TEXT_DOMAIN' ) ],
-			'name_field_description'     => [ $name_field_description, $name_field_description ],
-			'slug_field_description'     => [ $slug_field_description, $slug_field_description ],
-			'parent_field_description'   => [ null, $parent_field_description ],
-			'desc_field_description'     => [ $desc_field_description, $desc_field_description ],
-			'edit_item'                  => [ esc_html__( 'Edit Tag', 'TEXT_DOMAIN' ), esc_html__( 'Edit Category', 'TEXT_DOMAIN' ) ],
-			'view_item'                  => [ esc_html__( 'View Tag', 'TEXT_DOMAIN' ), esc_html__( 'View Category', 'TEXT_DOMAIN' ) ],
-			'update_item'                => [ esc_html__( 'Update Tag', 'TEXT_DOMAIN' ), esc_html__( 'Update Category', 'TEXT_DOMAIN' ) ],
-			'add_new_item'               => [ esc_html__( 'Add New Tag', 'TEXT_DOMAIN' ), esc_html__( 'Add New Category', 'TEXT_DOMAIN' ) ],
-			'new_item_name'              => [ esc_html__( 'New Tag Name', 'TEXT_DOMAIN' ), esc_html__( 'New Category Name', 'TEXT_DOMAIN' ) ],
-			'separate_items_with_commas' => [ esc_html__( 'Separate tags with commas', 'TEXT_DOMAIN' ), null ],
-			'add_or_remove_items'        => [ esc_html__( 'Add or remove tags', 'TEXT_DOMAIN' ), null ],
-			'choose_from_most_used'      => [ esc_html__( 'Choose from the most used tags', 'TEXT_DOMAIN' ), null ],
-			'not_found'                  => [ esc_html__( 'No tags found.', 'TEXT_DOMAIN' ), esc_html__( 'No categories found.', 'TEXT_DOMAIN' ) ],
-			'no_terms'                   => [ esc_html__( 'No tags', 'TEXT_DOMAIN' ), esc_html__( 'No categories', 'TEXT_DOMAIN' ) ],
-			'filter_by_item'             => [ null, esc_html__( 'Filter by category', 'TEXT_DOMAIN' ) ],
-			'items_list_navigation'      => [ esc_html__( 'Tags list navigation', 'TEXT_DOMAIN' ), esc_html__( 'Categories list navigation', 'TEXT_DOMAIN' ) ],
-			'items_list'                 => [ esc_html__( 'Tags list', 'TEXT_DOMAIN' ), esc_html__( 'Categories list', 'TEXT_DOMAIN' ) ],
+			'name'                       => _x( 'Tags', 'taxonomy general name', 'TEXT_DOMAIN' ),
+			'singular_name'              => _x( 'Tag', 'taxonomy singular name', 'TEXT_DOMAIN' ),
+			'search_items'               => esc_html__( 'Search Tags', 'TEXT_DOMAIN' ),
+			'popular_items'              => esc_html__( 'Popular Tags', 'TEXT_DOMAIN' ),
+			'all_items'                  => esc_html__( 'All Tags', 'TEXT_DOMAIN' ),
+			'parent_item'                => esc_html__( 'Parent Category', 'TEXT_DOMAIN' ),
+			'parent_item_colon'          => esc_html__( 'Parent Category:', 'TEXT_DOMAIN' ),
+			'name_field_description'     => $name_field_description,
+			'slug_field_description'     => $slug_field_description,
+			'parent_field_description'   => $parent_field_description,
+			'desc_field_description'     => $desc_field_description,
+			'edit_item'                  => esc_html__( 'Edit Tag', 'TEXT_DOMAIN' ),
+			'view_item'                  => esc_html__( 'View Tag', 'TEXT_DOMAIN' ),
+			'update_item'                => esc_html__( 'Update Tag', 'TEXT_DOMAIN' ),
+			'add_new_item'               => esc_html__( 'Add New Tag', 'TEXT_DOMAIN' ),
+			'new_item_name'              => esc_html__( 'New Tag Name', 'TEXT_DOMAIN' ),
+			'separate_items_with_commas' => esc_html__( 'Separate tags with commas', 'TEXT_DOMAIN' ),
+			'add_or_remove_items'        => esc_html__( 'Add or remove tags', 'TEXT_DOMAIN' ),
+			'choose_from_most_used'      => esc_html__( 'Choose from the most used tags', 'TEXT_DOMAIN' ),
+			'not_found'                  => esc_html__( 'No tags found.', 'TEXT_DOMAIN' ),
+			'no_terms'                   => esc_html__( 'No tags', 'TEXT_DOMAIN' ),
+			'filter_by_item'             => esc_html__( 'Filter by category', 'TEXT_DOMAIN' ),
+			'items_list_navigation'      => esc_html__( 'Tags list navigation', 'TEXT_DOMAIN' ),
+			'items_list'                 => esc_html__( 'Tags list', 'TEXT_DOMAIN' ),
 			/* translators: Tab heading when selecting from the most used terms. */
-			'most_used'                  => [ _x( 'Most Used', 'tags', 'TEXT_DOMAIN' ), _x( 'Most Used', 'categories', 'TEXT_DOMAIN' ) ],
-			'back_to_items'              => [ esc_html__( '&larr; Go to Tags', 'TEXT_DOMAIN' ), esc_html__( '&larr; Go to Categories', 'TEXT_DOMAIN' ) ],
-			'item_link'                  => [
-				_x( 'Tag Link', 'navigation link block title', 'TEXT_DOMAIN' ),
-				_x( 'Category Link', 'navigation link block title', 'TEXT_DOMAIN' ),
-			],
-			'item_link_description'      => [
-				_x( 'A link to a tag.', 'navigation link block description', 'TEXT_DOMAIN' ),
-				_x( 'A link to a category.', 'navigation link block description', 'TEXT_DOMAIN' ),
-			],
+			'most_used'                  => _x( 'Most Used', 'tags', 'TEXT_DOMAIN' ),
+			'back_to_items'              => esc_html__( '&larr; Go to Tags', 'TEXT_DOMAIN' ),
+			'item_link'                  => _x( 'Tag Link', 'navigation link block title', 'TEXT_DOMAIN' ),
+			'item_link_description'      => _x( 'A link to a tag.', 'navigation link block description', 'TEXT_DOMAIN' ),
 		];
 
 		foreach ( $labels as $key => $value )
@@ -1568,8 +1562,9 @@ class Ctxm
 	public function register ()
 	{
 		$this->processLabels();
-		$this->processargs();
 		$this->addPermalinkSettings();
+		$this->processargs();
+
 		wpe_add_taxonomy( $this->tax_type, $this->post_type, $this->args );
 	}
 

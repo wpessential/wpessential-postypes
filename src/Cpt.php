@@ -238,7 +238,7 @@ final class Cpt
 	private $has_archive = false;
 
 	/**
-	 * @var bool Rewrite status
+	 * @var bool|array Rewrite status
 	 */
 	private $rewrite = true;
 
@@ -1459,6 +1459,8 @@ final class Cpt
 			wpe_array_set( $args, $key, $this->$key );
 		}
 
+		$args = array_filter( $args );
+
 		$args[ 'labels' ]      = $this->labels;
 		$args[ 'description' ] = $this->description_string;
 
@@ -1473,45 +1475,39 @@ final class Cpt
 	private function processLabels ()
 	{
 		$labels = [
-			'name'                     => [ _x( 'Posts', 'post type general name', 'TEXT_DOMAIN' ), _x( 'Pages', 'post type general name', 'TEXT_DOMAIN' ) ],
-			'singular_name'            => [ _x( 'Post', 'post type singular name', 'TEXT_DOMAIN' ), _x( 'Page', 'post type singular name', 'TEXT_DOMAIN' ) ],
-			'add_new'                  => [ esc_html__( 'Add New', 'TEXT_DOMAIN' ), esc_html__( 'Add New', 'TEXT_DOMAIN' ) ],
-			'add_new_item'             => [ esc_html__( 'Add New Post', 'TEXT_DOMAIN' ), esc_html__( 'Add New Page', 'TEXT_DOMAIN' ) ],
-			'edit_item'                => [ esc_html__( 'Edit Post', 'TEXT_DOMAIN' ), esc_html__( 'Edit Page', 'TEXT_DOMAIN' ) ],
-			'new_item'                 => [ esc_html__( 'New Post', 'TEXT_DOMAIN' ), esc_html__( 'New Page', 'TEXT_DOMAIN' ) ],
-			'view_item'                => [ esc_html__( 'View Post', 'TEXT_DOMAIN' ), esc_html__( 'View Page', 'TEXT_DOMAIN' ) ],
-			'view_items'               => [ esc_html__( 'View Posts', 'TEXT_DOMAIN' ), esc_html__( 'View Pages', 'TEXT_DOMAIN' ) ],
-			'search_items'             => [ esc_html__( 'Search Posts', 'TEXT_DOMAIN' ), esc_html__( 'Search Pages', 'TEXT_DOMAIN' ) ],
-			'not_found'                => [ esc_html__( 'No posts found.', 'TEXT_DOMAIN' ), esc_html__( 'No pages found.', 'TEXT_DOMAIN' ) ],
-			'not_found_in_trash'       => [ esc_html__( 'No posts found in Trash.', 'TEXT_DOMAIN' ), esc_html__( 'No pages found in Trash.', 'TEXT_DOMAIN' ) ],
-			'parent_item_colon'        => [ null, esc_html__( 'Parent Page:', 'TEXT_DOMAIN' ) ],
-			'all_items'                => [ esc_html__( 'All Posts', 'TEXT_DOMAIN' ), esc_html__( 'All Pages', 'TEXT_DOMAIN' ) ],
-			'archives'                 => [ esc_html__( 'Post Archives', 'TEXT_DOMAIN' ), esc_html__( 'Page Archives', 'TEXT_DOMAIN' ) ],
-			'attributes'               => [ esc_html__( 'Post Attributes', 'TEXT_DOMAIN' ), esc_html__( 'Page Attributes', 'TEXT_DOMAIN' ) ],
-			'insert_into_item'         => [ esc_html__( 'Insert into post', 'TEXT_DOMAIN' ), esc_html__( 'Insert into page', 'TEXT_DOMAIN' ) ],
-			'uploaded_to_this_item'    => [ esc_html__( 'Uploaded to this post', 'TEXT_DOMAIN' ), esc_html__( 'Uploaded to this page', 'TEXT_DOMAIN' ) ],
-			'featured_image'           => [ _x( 'Featured image', 'post', 'TEXT_DOMAIN' ), _x( 'Featured image', 'page', 'TEXT_DOMAIN' ) ],
-			'set_featured_image'       => [ _x( 'Set featured image', 'post', 'TEXT_DOMAIN' ), _x( 'Set featured image', 'page', 'TEXT_DOMAIN' ) ],
-			'remove_featured_image'    => [ _x( 'Remove featured image', 'post', 'TEXT_DOMAIN' ), _x( 'Remove featured image', 'page', 'TEXT_DOMAIN' ) ],
-			'use_featured_image'       => [ _x( 'Use as featured image', 'post', 'TEXT_DOMAIN' ), _x( 'Use as featured image', 'page', 'TEXT_DOMAIN' ) ],
-			'filter_items_list'        => [ esc_html__( 'Filter posts list', 'TEXT_DOMAIN' ), esc_html__( 'Filter pages list', 'TEXT_DOMAIN' ) ],
-			'filter_by_date'           => [ esc_html__( 'Filter by date', 'TEXT_DOMAIN' ), esc_html__( 'Filter by date', 'TEXT_DOMAIN' ) ],
-			'items_list_navigation'    => [ esc_html__( 'Posts list navigation', 'TEXT_DOMAIN' ), esc_html__( 'Pages list navigation', 'TEXT_DOMAIN' ) ],
-			'items_list'               => [ esc_html__( 'Posts list', 'TEXT_DOMAIN' ), esc_html__( 'Pages list', 'TEXT_DOMAIN' ) ],
-			'item_published'           => [ esc_html__( 'Post published.', 'TEXT_DOMAIN' ), esc_html__( 'Page published.', 'TEXT_DOMAIN' ) ],
-			'item_published_privately' => [ esc_html__( 'Post published privately.', 'TEXT_DOMAIN' ), esc_html__( 'Page published privately.', 'TEXT_DOMAIN' ) ],
-			'item_reverted_to_draft'   => [ esc_html__( 'Post reverted to draft.', 'TEXT_DOMAIN' ), esc_html__( 'Page reverted to draft.', 'TEXT_DOMAIN' ) ],
-			'item_trashed'             => [ esc_html__( 'Post trashed.', 'TEXT_DOMAIN' ), esc_html__( 'Page trashed.', 'TEXT_DOMAIN' ) ],
-			'item_scheduled'           => [ esc_html__( 'Post scheduled.', 'TEXT_DOMAIN' ), esc_html__( 'Page scheduled.', 'TEXT_DOMAIN' ) ],
-			'item_updated'             => [ esc_html__( 'Post updated.', 'TEXT_DOMAIN' ), esc_html__( 'Page updated.', 'TEXT_DOMAIN' ) ],
-			'item_link'                => [
-				_x( 'Post Link', 'navigation link block title', 'TEXT_DOMAIN' ),
-				_x( 'Page Link', 'navigation link block title', 'TEXT_DOMAIN' ),
-			],
-			'item_link_description'    => [
-				_x( 'A link to a post.', 'navigation link block description', 'TEXT_DOMAIN' ),
-				_x( 'A link to a page.', 'navigation link block description', 'TEXT_DOMAIN' ),
-			],
+			'name'                     => _x( 'Posts', 'post type general name', 'TEXT_DOMAIN' ),
+			'singular_name'            => _x( 'Post', 'post type singular name', 'TEXT_DOMAIN' ),
+			'add_new'                  => esc_html__( 'Add New', 'TEXT_DOMAIN' ),
+			'add_new_item'             => esc_html__( 'Add New Post', 'TEXT_DOMAIN' ),
+			'edit_item'                => esc_html__( 'Edit Post', 'TEXT_DOMAIN' ),
+			'new_item'                 => esc_html__( 'New Post', 'TEXT_DOMAIN' ),
+			'view_item'                => esc_html__( 'View Post', 'TEXT_DOMAIN' ),
+			'view_items'               => esc_html__( 'View Posts', 'TEXT_DOMAIN' ),
+			'search_items'             => esc_html__( 'Search Posts', 'TEXT_DOMAIN' ),
+			'not_found'                => esc_html__( 'No posts found.', 'TEXT_DOMAIN' ),
+			'not_found_in_trash'       => esc_html__( 'No posts found in Trash.', 'TEXT_DOMAIN' ),
+			'parent_item_colon'        => esc_html__( 'Parent Page:', 'TEXT_DOMAIN' ),
+			'all_items'                => esc_html__( 'All Posts', 'TEXT_DOMAIN' ),
+			'archives'                 => esc_html__( 'Post Archives', 'TEXT_DOMAIN' ),
+			'attributes'               => esc_html__( 'Post Attributes', 'TEXT_DOMAIN' ),
+			'insert_into_item'         => esc_html__( 'Insert into post', 'TEXT_DOMAIN' ),
+			'uploaded_to_this_item'    => esc_html__( 'Uploaded to this post', 'TEXT_DOMAIN' ),
+			'featured_image'           => _x( 'Featured image', 'post', 'TEXT_DOMAIN' ),
+			'set_featured_image'       => _x( 'Set featured image', 'post', 'TEXT_DOMAIN' ),
+			'remove_featured_image'    => _x( 'Remove featured image', 'post', 'TEXT_DOMAIN' ),
+			'use_featured_image'       => _x( 'Use as featured image', 'post', 'TEXT_DOMAIN' ),
+			'filter_items_list'        => esc_html__( 'Filter posts list', 'TEXT_DOMAIN' ),
+			'filter_by_date'           => esc_html__( 'Filter by date', 'TEXT_DOMAIN' ),
+			'items_list_navigation'    => esc_html__( 'Posts list navigation', 'TEXT_DOMAIN' ),
+			'items_list'               => esc_html__( 'Posts list', 'TEXT_DOMAIN' ),
+			'item_published'           => esc_html__( 'Post published.', 'TEXT_DOMAIN' ),
+			'item_published_privately' => esc_html__( 'Post published privately.', 'TEXT_DOMAIN' ),
+			'item_reverted_to_draft'   => esc_html__( 'Post reverted to draft.', 'TEXT_DOMAIN' ),
+			'item_trashed'             => esc_html__( 'Post trashed.', 'TEXT_DOMAIN' ),
+			'item_scheduled'           => esc_html__( 'Post scheduled.', 'TEXT_DOMAIN' ),
+			'item_updated'             => esc_html__( 'Post updated.', 'TEXT_DOMAIN' ),
+			'item_link'                => _x( 'Post Link', 'navigation link block title', 'TEXT_DOMAIN' ),
+			'item_link_description'    => _x( 'A link to a post.', 'navigation link block description', 'TEXT_DOMAIN' ),
 		];
 
 		foreach ( $labels as $key => $value )
@@ -1531,8 +1527,9 @@ final class Cpt
 	public function register ()
 	{
 		$this->processLabels();
-		$this->processargs();
 		$this->addPermalinkSettings();
+		$this->processargs();
+
 		wpe_add_post_type( $this->post_type, $this->args );
 	}
 
@@ -1541,7 +1538,7 @@ final class Cpt
 	 *
 	 * @return void
 	 */
-	public function addPermalinkSettings ()
+	private function addPermalinkSettings ()
 	{
 		if ( ! $this->rewrite ) return;
 
