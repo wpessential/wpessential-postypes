@@ -2,11 +2,12 @@
 
 namespace WPEssential\Library;
 
-use WPEssential\Library\Roles;
+if ( ! \defined( 'ABSPATH' ) )
+{
+	exit; // Exit if accessed directly.
+}
+
 use WPEssential\Library\Helper\Resourceful;
-use WPEssential\Library\Inflect;
-use WPEssential\Library\Sanitize;
-use WPEssential\Library\Str;
 
 /**
  * Taxonomy
@@ -17,9 +18,8 @@ class Taxonomy extends Registrable
 {
 	use Resourceful;
 
-	protected $postTypes = [];
-	protected $form      = [];
-
+	protected $postTypes   = [];
+	protected $form        = [];
 	protected $existing    = null;
 	protected $maxIdLength = 32;
 
@@ -49,7 +49,7 @@ class Taxonomy extends Registrable
 
 		if ( empty( $plural ) )
 		{
-			$plural = trim( strtolower( (string) Inflect::pluralize( $singular ) ) );
+			$plural = strtolower( trim( (string) Inflect::pluralize( $singular ) ) );
 		}
 
 		$labelSingular = $singular;
@@ -69,7 +69,7 @@ class Taxonomy extends Registrable
 			$this->applyQuickLabels( $labelSingular, $labelPlural, $keep_case );
 		}
 
-		$existing = get_taxonomy( $id );
+		$existing = get_taxonomy( "wpe_{$id}" );
 
 		if ( $existing )
 		{
@@ -83,7 +83,6 @@ class Taxonomy extends Registrable
 			$this->resource  = [
 				'singular'   => $singular,
 				'plural'     => $plural,
-				'model'      => null,
 				'controller' => null
 			];
 			$this->postTypes = $this->existing->object_type;
@@ -98,7 +97,6 @@ class Taxonomy extends Registrable
 		$this->resource = [
 			'singular'   => $singular,
 			'plural'     => $plural,
-			'model'      => null,
 			'controller' => null
 		];
 
@@ -151,25 +149,25 @@ class Taxonomy extends Registrable
 		$context = 'taxonomy:' . $this->getId();
 
 		$labels = [
-			'add_new_item'               => sprintf( _x( 'Add New %s', $context, 'typerocket-core' ), $upperSingular ),
-			'add_or_remove_items'        => sprintf( _x( 'Add or remove %s', $context, 'typerocket-core' ), $lowerPlural ),
-			'all_items'                  => sprintf( _x( 'All %s', $context, 'typerocket-core' ), $upperPlural ),
-			'back_to_items'              => sprintf( _x( '← Back to %s', $context, 'typerocket-core' ), $lowerPlural ),
-			'choose_from_most_used'      => sprintf( _x( 'Choose from the most used %s', $context, 'typerocket-core' ), $lowerPlural ),
-			'edit_item'                  => sprintf( _x( 'Edit %s', $context, 'typerocket-core' ), $upperSingular ),
-			'name'                       => sprintf( _x( '%s', $context . ':taxonomy general name', 'typerocket-core' ), $upperPlural ),
-			'menu_name'                  => sprintf( _x( '%s', $context . ':admin menu', 'typerocket-core' ), $upperPlural ),
-			'new_item_name'              => sprintf( _x( 'New %s Name', $context, 'typerocket-core' ), $upperSingular ),
-			'no_terms'                   => sprintf( _x( 'No %s', $context, 'typerocket-core' ), $lowerPlural ),
-			'not_found'                  => sprintf( _x( 'No %s found.', $context, 'typerocket-core' ), $lowerPlural ),
-			'parent_item'                => sprintf( _x( 'Parent %s', $context, 'typerocket-core' ), $upperSingular ),
-			'parent_item_colon'          => sprintf( _x( 'Parent %s:', $context, 'typerocket-core' ), $upperSingular ),
-			'popular_items'              => sprintf( _x( 'Popular %s', $context, 'typerocket-core' ), $upperPlural ),
-			'search_items'               => sprintf( _x( 'Search %s', $context, 'typerocket-core' ), $upperPlural ),
-			'separate_items_with_commas' => sprintf( _x( 'Separate %s with commas', $context, 'typerocket-core' ), $lowerPlural ),
-			'singular_name'              => sprintf( _x( '%s', $context . ':taxonomy singular name', 'typerocket-core' ), $upperSingular ),
-			'update_item'                => sprintf( _x( 'Update %s', $context, 'typerocket-core' ), $upperSingular ),
-			'view_item'                  => sprintf( _x( 'View %s', $context, 'typerocket-core' ), $upperSingular ),
+			'add_new_item'               => sprintf( _x( 'Add New %s', $context, 'TEXT_DOMAIN' ), $upperSingular ),
+			'add_or_remove_items'        => sprintf( _x( 'Add or remove %s', $context, 'TEXT_DOMAIN' ), $lowerPlural ),
+			'all_items'                  => sprintf( _x( 'All %s', $context, 'TEXT_DOMAIN' ), $upperPlural ),
+			'back_to_items'              => sprintf( _x( '← Back to %s', $context, 'TEXT_DOMAIN' ), $lowerPlural ),
+			'choose_from_most_used'      => sprintf( _x( 'Choose from the most used %s', $context, 'TEXT_DOMAIN' ), $lowerPlural ),
+			'edit_item'                  => sprintf( _x( 'Edit %s', $context, 'TEXT_DOMAIN' ), $upperSingular ),
+			'name'                       => sprintf( _x( '%s', $context . ':taxonomy general name', 'TEXT_DOMAIN' ), $upperPlural ),
+			'menu_name'                  => sprintf( _x( '%s', $context . ':admin menu', 'TEXT_DOMAIN' ), $upperPlural ),
+			'new_item_name'              => sprintf( _x( 'New %s Name', $context, 'TEXT_DOMAIN' ), $upperSingular ),
+			'no_terms'                   => sprintf( _x( 'No %s', $context, 'TEXT_DOMAIN' ), $lowerPlural ),
+			'not_found'                  => sprintf( _x( 'No %s found.', $context, 'TEXT_DOMAIN' ), $lowerPlural ),
+			'parent_item'                => sprintf( _x( 'Parent %s', $context, 'TEXT_DOMAIN' ), $upperSingular ),
+			'parent_item_colon'          => sprintf( _x( 'Parent %s:', $context, 'TEXT_DOMAIN' ), $upperSingular ),
+			'popular_items'              => sprintf( _x( 'Popular %s', $context, 'TEXT_DOMAIN' ), $upperPlural ),
+			'search_items'               => sprintf( _x( 'Search %s', $context, 'TEXT_DOMAIN' ), $upperPlural ),
+			'separate_items_with_commas' => sprintf( _x( 'Separate %s with commas', $context, 'TEXT_DOMAIN' ), $lowerPlural ),
+			'singular_name'              => sprintf( _x( '%s', $context . ':taxonomy singular name', 'TEXT_DOMAIN' ), $upperSingular ),
+			'update_item'                => sprintf( _x( 'Update %s', $context, 'TEXT_DOMAIN' ), $upperSingular ),
+			'view_item'                  => sprintf( _x( 'View %s', $context, 'TEXT_DOMAIN' ), $upperSingular ),
 		];
 
 		return $this->setLabels( $labels, $upperPlural, false );;
@@ -485,11 +483,8 @@ class Taxonomy extends Registrable
 				return $this;
 			}
 		}
-
 		wpe_add_taxonomy( $this->id, $this->postTypes, $this->args );
 		$this->resource[ 'object' ] = $this;
-
-		return $this;
 	}
 
 	/**
@@ -514,40 +509,11 @@ class Taxonomy extends Registrable
 			}
 		}
 
-		if ( is_string( $s ) && ! in_array( $s, $this->postTypes ) )
+		if ( is_string( $s ) && ! in_array( $s, $this->postTypes, true ) )
 		{
-			$this->postTypes[] = $s;
+			$this->postTypes[] = "wpe_{$s}";
 		}
 
 		return $this;
-	}
-
-	/**
-	 * Add permalink settings to the WordPress admin.
-	 *
-	 * @return void
-	 */
-	public function addPermalinkSettings ()
-	{
-		$name = $this->$this->args[ 'labels' ][ 'name' ];
-		$slug = $this->getId();
-		$slug = get_option( "{$slug}_permalink", $slug );
-		$this->setSlug( $slug );
-
-		add_action( 'admin_init', function () use ( $name, $slug )
-		{
-			add_settings_field(
-				"{$this->getId()}_permalink",
-				sprintf( esc_html__( '%s', 'TEXT_DOMAIN' ), $name ),
-				function () use ( $slug )
-				{
-					echo '<input type="text" name="' . esc_attr( "{$this->getId()}_permalink" ) . '" value="' . esc_attr( $slug ) . '" class="regular-text">';
-				},
-				'permalink',
-				'optional'
-			);
-
-			register_setting( 'permalink', "{$this->getId()}_permalink" );
-		} );
 	}
 }

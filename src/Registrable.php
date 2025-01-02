@@ -2,7 +2,10 @@
 
 namespace WPEssential\Library;
 
-use WPEssential\Library\Sanitize;
+if ( ! \defined( 'ABSPATH' ) )
+{
+	exit; // Exit if accessed directly.
+}
 
 abstract class Registrable
 {
@@ -286,7 +289,7 @@ abstract class Registrable
 				else
 				{
 					$current_class = get_class( $this );
-					throw new \Exception( 'TypeRocket: You are passing the unsupported object ' . $class . ' into ' . $current_class . '.' );
+					throw new \Exception( 'You are passing the unsupported object ' . $class . ' into ' . $current_class . '.' );
 				}
 			}
 		}
@@ -311,7 +314,7 @@ abstract class Registrable
 			}
 		}
 
-		throw new \Exception( 'TypeRocket: Registrable object of ID ' . $id . ' not found.' );
+		throw new \Exception( 'Registrable object of ID ' . $id . ' not found.' );
 	}
 
 	/**
@@ -329,8 +332,78 @@ abstract class Registrable
 	 *
 	 * @return static
 	 */
-	public static function new ( ...$args )
+	public static function make ( ...$args )
 	{
 		return new static( ...$args );
+	}
+
+	/**
+	 * Add permalink settings to the WordPress admin.
+	 *
+	 * @return void
+	 */
+	public function setPermalinkSettings ()
+	{
+		$field = "{$this->getId()}_permalink";
+		$slug  = $this->getSlug();
+		$slug  = get_option( $field, $slug );
+		$this->setSlug( $slug );
+
+		$this->setPermalinkField( $field, $slug );
+		$this->updatePermalink( $field );
+		$this->modifyPermalink( $field );
+
+		return $this;
+	}
+
+	private function setPermalinkField ( $field, $slug )
+	{
+		if ( ! function_exists( 'add_settings_field' ) )
+		{
+			require_once ABSPATH . 'wp-admin/includes/template.php';
+		}
+
+		$name = $this->args[ 'labels' ][ 'name' ];
+		if ( ! empty( $this->postTypes ) )
+		{
+			$name = "{$this->args[ 'labels' ][ 'name' ]}: (wpe_{$this->getId()})";
+		}
+
+		add_settings_field(
+			$field,
+			sprintf( esc_html__( '%s', 'TEXT_DOMAIN' ), $name ),
+			function () use ( $slug, $field )
+			{
+				echo '<input type="text" name="' . esc_attr( $field ) . '" value="' . esc_attr( $slug ) . '" class="regular-text">';
+			},
+			'permalink',
+			'optional'
+		);
+
+		register_setting( 'permalink', $field );
+	}
+
+	private function updatePermalink ( $field )
+	{
+		global $pagenow;
+
+		if ( isset( $_POST[ $field ] ) && 'options-permalink.php' === $pagenow )
+		{
+			update_option( $field, sanitize_text_field( $_POST[ $field ] ) );
+			flush_rewrite_rules();
+		}
+	}
+
+	private function modifyPermalink ( $field )
+	{
+		add_filter( 'rewrite_rules_array', function ( $rules ) use ( $field )
+		{
+			$custom_field_value = get_option( $field );
+			if ( ! empty( $custom_field_value ) )
+			{
+				$rules[ '^' . $custom_field_value . '/([^/]+)/?$' ] = 'index.php?pagename=$matches[1]';
+			}
+			return $rules;
+		} );
 	}
 }

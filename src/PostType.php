@@ -2,11 +2,12 @@
 
 namespace WPEssential\Library;
 
-use WPEssential\Library\Roles;
-use WPEssential\Library\Inflect;
-use WPEssential\Library\Sanitize;
+if ( ! \defined( 'ABSPATH' ) )
+{
+	exit; // Exit if accessed directly.
+}
+
 use WPEssential\Library\Helper\Resourceful;
-use WPEssential\Library\Str;
 
 class PostType extends Registrable
 {
@@ -16,7 +17,6 @@ class PostType extends Registrable
 	protected $form                   = [];
 	protected $saves                  = [];
 	protected $taxonomies             = [];
-	protected $revisions              = null;
 	protected $columns                = [];
 	protected $primaryColumn          = null;
 	protected $metaBoxes              = [];
@@ -24,7 +24,6 @@ class PostType extends Registrable
 	protected $archiveQueryTaxonomies = false;
 	protected $icon                   = null;
 	protected $existing               = null;
-	protected $hooksAttached          = false;
 	protected $rootSlug               = false;
 	protected $featureless            = false;
 	protected $forceDisableGutenberg  = false;
@@ -78,7 +77,7 @@ class PostType extends Registrable
 			$this->applyQuickLabels( $labelSingular, $labelPlural, $keep_case );
 		}
 
-		$this->existing = get_post_type_object( $id );
+		$this->existing = get_post_type_object( "wpe_{$id}" );
 
 		if ( $this->existing )
 		{
@@ -92,7 +91,6 @@ class PostType extends Registrable
 			$this->resource = [
 				'singular'   => $singular,
 				'plural'     => $plural,
-				'model'      => null,
 				'controller' => null
 			];
 
@@ -106,7 +104,6 @@ class PostType extends Registrable
 		$this->resource = [
 			'singular'   => $singular,
 			'plural'     => $plural,
-			'model'      => null,
 			'controller' => null
 		];
 
@@ -330,16 +327,6 @@ class PostType extends Registrable
 	public function getSaves ( $key = null )
 	{
 		return is_null( $key ) ? $this->saves : ( $this->saves[ $key ] ?? null );
-	}
-
-	/**
-	 * Get the post type icon
-	 *
-	 * @return null|string
-	 */
-	public function getIcon ()
-	{
-		return $this->icon;
 	}
 
 	/**
@@ -601,30 +588,6 @@ class PostType extends Registrable
 		$this->setSupports( [] );
 
 		return $this;
-	}
-
-	/**
-	 * Keep Number of Revisions
-	 *
-	 * @param int $number
-	 *
-	 * @return $this
-	 */
-	public function setRevisions ( $number )
-	{
-		$this->revisions = (int) $number;
-
-		return $this;
-	}
-
-	/**
-	 * Get Revisions
-	 *
-	 * @return int|null
-	 */
-	public function getRevisions ()
-	{
-		return $this->revisions;
 	}
 
 	/**
@@ -1074,34 +1037,5 @@ class PostType extends Registrable
 		}
 
 		return $this;
-	}
-
-	/**
-	 * Add permalink settings to the WordPress admin.
-	 *
-	 * @return void
-	 */
-	public function addPermalinkSettings ()
-	{
-		$name = $this->$this->args[ 'labels' ][ 'name' ];
-		$slug = $this->getId();
-		$slug = get_option( "{$slug}_permalink", $slug );
-		$this->setSlug( $slug );
-
-		add_action( 'admin_init', function () use ( $name, $slug )
-		{
-			add_settings_field(
-				"{$this->getId()}_permalink",
-				sprintf( esc_html__( '%s', 'TEXT_DOMAIN' ), $name ),
-				function () use ( $slug )
-				{
-					echo '<input type="text" name="' . esc_attr( "{$this->getId()}_permalink" ) . '" value="' . esc_attr( $slug ) . '" class="regular-text">';
-				},
-				'permalink',
-				'optional'
-			);
-
-			register_setting( 'permalink', "{$this->getId()}_permalink" );
-		} );
 	}
 }
